@@ -1,3 +1,32 @@
-[gd_scene format=3 uid="uid://csksi6ddfggiv"]
+[gd_scene load_steps=8 format=3 uid="uid://csksi6ddfggiv"]
+
+[ext_resource type="PackedScene" uid="uid://cl5j5gaw27nio" path="res://underwater-photos/Characters/player.tscn" id="1_jhpc0"]
+[ext_resource type="Script" path="res://addons/terrabrush/TerraBrush.cs" id="2_gkqyl"]
+[ext_resource type="Texture2D" uid="uid://bvmapu80ebk25" path="res://underwater-photos/Scenes/test_scene/Heightmap_0_0.res" id="3_lj5vh"]
+[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZoneResource.cs" id="4_gtwqm"]
+[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZonesResource.cs" id="5_pqfiv"]
+
+[sub_resource type="Resource" id="Resource_bo0ko"]
+script = ExtResource("4_gtwqm")
+ZonePosition = Vector2i(0, 0)
+HeightMapTexture = ExtResource("3_lj5vh")
+SplatmapsTexture = []
+FoliagesTexture = []
+ObjectsTexture = []
+
+[sub_resource type="Resource" id="Resource_6ajhe"]
+script = ExtResource("5_pqfiv")
+Zones = [SubResource("Resource_bo0ko")]
 
 [node name="test_scene" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_jhpc0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.59482, 0)
+
+[node name="TerraBrush" type="Node3D" parent="."]
+script = ExtResource("2_gkqyl")
+DataPath = "res://underwater-photos/Scenes/test_scene"
+Foliages = []
+Objects = []
+TerrainZones = SubResource("Resource_6ajhe")
+metadata/_edit_lock_ = false
