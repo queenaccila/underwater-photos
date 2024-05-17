@@ -17,6 +17,7 @@ mesh = SubResource("CapsuleMesh_b8hxc")
 shape = SubResource("ConvexPolygonShape3D_resls")
 
 [node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.443609)
 
 [node name="UIRoot" type="Control" parent="."]
 layout_mode = 3

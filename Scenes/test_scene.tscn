@@ -1,32 +1,143 @@
-[gd_scene load_steps=8 format=3 uid="uid://csksi6ddfggiv"]
+[gd_scene load_steps=9 format=3 uid="uid://csksi6ddfggiv"]
 
 [ext_resource type="PackedScene" uid="uid://cl5j5gaw27nio" path="res://underwater-photos/Characters/player.tscn" id="1_jhpc0"]
-[ext_resource type="Script" path="res://addons/terrabrush/TerraBrush.cs" id="2_gkqyl"]
-[ext_resource type="Texture2D" uid="uid://bvmapu80ebk25" path="res://underwater-photos/Scenes/test_scene/Heightmap_0_0.res" id="3_lj5vh"]
-[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZoneResource.cs" id="4_gtwqm"]
-[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZonesResource.cs" id="5_pqfiv"]
+[ext_resource type="Material" uid="uid://vfocfurvy45w" path="res://underwater-photos/Materials/underwater_waves.tres" id="6_8m8qb"]
 
-[sub_resource type="Resource" id="Resource_bo0ko"]
-script = ExtResource("4_gtwqm")
-ZonePosition = Vector2i(0, 0)
-HeightMapTexture = ExtResource("3_lj5vh")
-SplatmapsTexture = []
-FoliagesTexture = []
-ObjectsTexture = []
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vrcfu"]
+next_pass = ExtResource("6_8m8qb")
+albedo_color = Color(0.478431, 0.478431, 0.478431, 1)
 
-[sub_resource type="Resource" id="Resource_6ajhe"]
-script = ExtResource("5_pqfiv")
-Zones = [SubResource("Resource_bo0ko")]
+[sub_resource type="BoxMesh" id="BoxMesh_4t57c"]
+material = SubResource("StandardMaterial3D_vrcfu")
+size = Vector3(2, 1, 2)
+
+[sub_resource type="Shader" id="Shader_6q5hn"]
+code = "// Shader Code origin from here: https://www.patreon.com/posts/making-stylized-27402644 by MinionsArt
+
+shader_type sky;
+render_mode use_half_res_pass;
+
+// Horizon
+uniform float offset_horizon : hint_range(-1.0, 1.0, 0.1) = 0.0;
+uniform float horizon_intensity : hint_range(-10.0, 5.0, 0.001) = -3.3;
+uniform vec4 sun_set : source_color = vec4(1.0, 0.8, 1.0, 1.0);
+uniform vec4 horizon_color_day : source_color = vec4(0.0, 0.8, 1.0, 1.0);
+uniform vec4 horizon_color_night : source_color = vec4(0.0, 0.8, 1.0, 1.0);
+
+// Sun
+uniform vec4 sun_color : source_color = vec4(1.0);
+uniform float sun_radius : hint_range(0.0, 2.0, 0.001) = 0.5;
+uniform bool flat_sun = true;
+
+// Moon
+uniform vec4 moon_color : source_color = vec4(1.0);
+uniform float moon_radius : hint_range(0.0, 2.0, 0.01) = 0.15;
+// negative: crescent on right side
+// positive: crescent on left side 
+uniform float moon_crescent : hint_range(-0.3, 0.3, 0.001) = -0.3;
+uniform float dark_falloff : hint_range(1.0, 6.0, 0.001) = 4.0;
+
+// Day Background Colors
+uniform vec4 day_bottom_color : source_color = vec4(0.4, 1.0, 1.0, 1.0);
+uniform vec4 day_top_color : source_color = vec4(0.0, 0.8, 1.0, 1.0);
+
+// Night Background Colors
+uniform vec4 night_bottom_color : source_color = vec4(0.0, 0.0, 0.2, 1.0);
+uniform vec4 night_top_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+// stars
+uniform sampler2D stars_texture : source_black;
+uniform sampler2D base_noise : hint_black;
+uniform float base_noise_scale : hint_range(0.0, 1.0, 0.001) = 0.2;
+uniform float stars_speed : hint_range(0.0, 1.0, 0.001) = 0.3;
+uniform float stars_cutoff : hint_range(0.0, 1.0, 0.001) = 0.08;
+uniform vec4 stars_sky_color : hint_color = vec4(0.0, 0.2, 0.1, 1);
+
+void sky() {
+	// get skyUV to place the sun and the moon
+	vec2 skyUV = EYEDIR.xz / EYEDIR.y;
+	
+	float base_n = texture(base_noise, (skyUV - TIME) * base_noise_scale).x;
+	
+	// get the middle -> abs of the EYEDIR to get the horizon
+	float horizon = abs((EYEDIR.y * horizon_intensity) - offset_horizon);
+	vec3 horizonGlow = clamp((1.0 - horizon * 5.0) * clamp(LIGHT0_DIRECTION.y * 10.0, 0.0, 1.0), 0.0, 1.0) * horizon_color_day.rgb;// 
+	vec3 horizonGlowNight = clamp((1.0 - horizon * dark_falloff) * clamp( - LIGHT0_DIRECTION.y * 10.0, 0.0, 1.0), 0.0, 1.0) * horizon_color_night.rgb;//
+	horizonGlow += horizonGlowNight;
+	
+	// horizon glow / sunset/ -rise
+	float sunset = clamp((1.0 - horizon) * clamp(LIGHT0_DIRECTION.y * 5.0, 0.0, 1.0), 0.0, 1.0);
+	vec3 sunsetColoured = sunset * sun_set.rgb;
+	
+	
+	// sun creation
+	float sun = distance(EYEDIR.xyz, LIGHT0_DIRECTION);
+	float sunDisc = 1.0 - clamp(sun / sun_radius, 0.0, 1.0);
+	
+	// option to render flat sun
+	if (flat_sun == true) {
+		sunDisc = roundEven(sunDisc);
+	}
+	
+	// moon creation
+	float moon = distance(EYEDIR.xyz, - LIGHT0_DIRECTION);
+	float crescentMoon = distance(vec3(EYEDIR.x + moon_crescent, EYEDIR.yz), - LIGHT0_DIRECTION);
+	float crescentMoonDisc = 1.0 - (crescentMoon / moon_radius);
+	crescentMoonDisc = clamp(crescentMoonDisc * 50.0, 0.0, 1.0);
+	float moonDisc = 1.0 - (moon / moon_radius);
+	moonDisc = clamp(moonDisc * 50.0, 0.0, 1.0);
+	moonDisc = clamp(moonDisc - crescentMoonDisc, 0.0, 1.0);
+	
+	// combine sun and moon
+	vec3 sunAndMoon = (sunDisc * sun_color.rgb) + (moonDisc * moon_color.rgb);
+	
+	// stars
+	vec3 stars = texture(stars_texture, skyUV + (stars_speed * (TIME / 20.0))).rgb;
+	stars *= clamp(-LIGHT0_DIRECTION.y, 0.0, 1.0);
+	stars = step(stars_cutoff, stars);
+	stars += stars_sky_color.rgb;
+	//stars += (base_n * stars_sky_color.rgb);
+	
+	
+	//Sky Background Gradient
+	// day color gradient
+	vec3 gradientDay = mix(day_bottom_color.rgb, day_top_color.rgb, clamp(EYEDIR.y, 0.0, 1.0));
+	// night color gradient
+	vec3 gradientNight = mix(night_bottom_color.rgb, night_top_color.rgb, clamp(EYEDIR.y, 0.0, 1.0));
+	vec3 skyGradients = mix(gradientNight, gradientDay, clamp(LIGHT0_DIRECTION.y, 0.0, 1.0));
+	
+	vec3 sky = skyGradients + sunAndMoon + sunsetColoured + stars + horizonGlow;
+	
+	COLOR = sky;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkemo"]
+shader = SubResource("Shader_6q5hn")
+
+[sub_resource type="Sky" id="Sky_53exx"]
+sky_material = SubResource("ShaderMaterial_qkemo")
+
+[sub_resource type="Environment" id="Environment_7i4x3"]
+background_mode = 1
+background_color = Color(0.376471, 0.690196, 0.984314, 1)
+background_canvas_max_layer = -1
+sky = SubResource("Sky_53exx")
+ambient_light_color = Color(0.376471, 0.690196, 0.984314, 1)
+reflected_light_source = 2
+glow_strength = 2.0
+glow_bloom = 1.0
+glow_hdr_threshold = 0.92
+glow_hdr_scale = 4.0
+adjustment_enabled = true
 
 [node name="test_scene" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1_jhpc0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.59482, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.09981, 0)
 
-[node name="TerraBrush" type="Node3D" parent="."]
-script = ExtResource("2_gkqyl")
-DataPath = "res://underwater-photos/Scenes/test_scene"
-Foliages = []
-Objects = []
-TerrainZones = SubResource("Resource_6ajhe")
-metadata/_edit_lock_ = false
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(65.9201, 0, 0, 0, 8.0225, 0, 0, 0, 56.1487, 0, 0, 0)
+mesh = SubResource("BoxMesh_4t57c")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7i4x3")
