@@ -37,8 +37,8 @@ void vertex() {
 
 void fragment() {
 	// Called for every pixel the material is visible on.
-	float scale = 0.05f;
-	float worley = worley(world_position.xz * scale + TIME * 0.25f, 3.0f, 3.0f);
+	float scale = 0.1f;
+	float worley = worley(world_position.xz * scale + TIME * 0.15f, 2.0f, 2.0f);
 	float color = texture(color_ramp, vec2(worley)).r;
 	color = min(0.999, color);
 	color = log(0.999) / log(color);

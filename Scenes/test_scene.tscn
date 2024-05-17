@@ -1,143 +1,120 @@
-[gd_scene load_steps=9 format=3 uid="uid://csksi6ddfggiv"]
+[gd_scene load_steps=18 format=3 uid="uid://csksi6ddfggiv"]
 
 [ext_resource type="PackedScene" uid="uid://cl5j5gaw27nio" path="res://underwater-photos/Characters/player.tscn" id="1_jhpc0"]
+[ext_resource type="Environment" uid="uid://casu3hr165o61" path="res://underwater-photos/Materials/ocean_world_environment.tres" id="4_adruk"]
 [ext_resource type="Material" uid="uid://vfocfurvy45w" path="res://underwater-photos/Materials/underwater_waves.tres" id="6_8m8qb"]
+[ext_resource type="Texture2D" uid="uid://dk0dhirqygxvt" path="res://underwater-photos/Art/ocean-particles.png" id="11_ncd3l"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vrcfu"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4iiyf"]
 next_pass = ExtResource("6_8m8qb")
-albedo_color = Color(0.478431, 0.478431, 0.478431, 1)
+albedo_color = Color(0.192157, 0.301961, 0.427451, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4t57c"]
-material = SubResource("StandardMaterial3D_vrcfu")
+material = SubResource("StandardMaterial3D_4iiyf")
 size = Vector3(2, 1, 2)
 
-[sub_resource type="Shader" id="Shader_6q5hn"]
-code = "// Shader Code origin from here: https://www.patreon.com/posts/making-stylized-27402644 by MinionsArt
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_bc7gm"]
+data = PackedVector3Array(-1, 0.5, 1, 1, 0.5, 1, -1, -0.5, 1, 1, 0.5, 1, 1, -0.5, 1, -1, -0.5, 1, 1, 0.5, -1, -1, 0.5, -1, 1, -0.5, -1, -1, 0.5, -1, -1, -0.5, -1, 1, -0.5, -1, 1, 0.5, 1, 1, 0.5, -1, 1, -0.5, 1, 1, 0.5, -1, 1, -0.5, -1, 1, -0.5, 1, -1, 0.5, -1, -1, 0.5, 1, -1, -0.5, -1, -1, 0.5, 1, -1, -0.5, 1, -1, -0.5, -1, 1, 0.5, 1, -1, 0.5, 1, 1, 0.5, -1, -1, 0.5, 1, -1, 0.5, -1, 1, 0.5, -1, -1, -0.5, 1, 1, -0.5, 1, -1, -0.5, -1, 1, -0.5, 1, 1, -0.5, -1, -1, -0.5, -1)
 
-shader_type sky;
-render_mode use_half_res_pass;
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7vb66"]
+albedo_color = Color(0.266667, 0.172549, 0.643137, 1)
 
-// Horizon
-uniform float offset_horizon : hint_range(-1.0, 1.0, 0.1) = 0.0;
-uniform float horizon_intensity : hint_range(-10.0, 5.0, 0.001) = -3.3;
-uniform vec4 sun_set : source_color = vec4(1.0, 0.8, 1.0, 1.0);
-uniform vec4 horizon_color_day : source_color = vec4(0.0, 0.8, 1.0, 1.0);
-uniform vec4 horizon_color_night : source_color = vec4(0.0, 0.8, 1.0, 1.0);
+[sub_resource type="BoxMesh" id="BoxMesh_remag"]
+material = SubResource("StandardMaterial3D_7vb66")
+size = Vector3(3, 3, 3)
 
-// Sun
-uniform vec4 sun_color : source_color = vec4(1.0);
-uniform float sun_radius : hint_range(0.0, 2.0, 0.001) = 0.5;
-uniform bool flat_sun = true;
+[sub_resource type="SphereMesh" id="SphereMesh_i5vs7"]
+radius = 1.5
+height = 3.0
 
-// Moon
-uniform vec4 moon_color : source_color = vec4(1.0);
-uniform float moon_radius : hint_range(0.0, 2.0, 0.01) = 0.15;
-// negative: crescent on right side
-// positive: crescent on left side 
-uniform float moon_crescent : hint_range(-0.3, 0.3, 0.001) = -0.3;
-uniform float dark_falloff : hint_range(1.0, 6.0, 0.001) = 4.0;
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yagew"]
+diffuse_mode = 3
+albedo_color = Color(0.619608, 0.235294, 0.831373, 1)
 
-// Day Background Colors
-uniform vec4 day_bottom_color : source_color = vec4(0.4, 1.0, 1.0, 1.0);
-uniform vec4 day_top_color : source_color = vec4(0.0, 0.8, 1.0, 1.0);
+[sub_resource type="TorusMesh" id="TorusMesh_broq6"]
+inner_radius = 1.0
+outer_radius = 2.0
 
-// Night Background Colors
-uniform vec4 night_bottom_color : source_color = vec4(0.0, 0.0, 0.2, 1.0);
-uniform vec4 night_top_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo3l0"]
+diffuse_mode = 3
+albedo_color = Color(0.117647, 0.435294, 0.615686, 1)
 
-// stars
-uniform sampler2D stars_texture : source_black;
-uniform sampler2D base_noise : hint_black;
-uniform float base_noise_scale : hint_range(0.0, 1.0, 0.001) = 0.2;
-uniform float stars_speed : hint_range(0.0, 1.0, 0.001) = 0.3;
-uniform float stars_cutoff : hint_range(0.0, 1.0, 0.001) = 0.08;
-uniform vec4 stars_sky_color : hint_color = vec4(0.0, 0.2, 0.1, 1);
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fgb8"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("11_ncd3l")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
 
-void sky() {
-	// get skyUV to place the sun and the moon
-	vec2 skyUV = EYEDIR.xz / EYEDIR.y;
-	
-	float base_n = texture(base_noise, (skyUV - TIME) * base_noise_scale).x;
-	
-	// get the middle -> abs of the EYEDIR to get the horizon
-	float horizon = abs((EYEDIR.y * horizon_intensity) - offset_horizon);
-	vec3 horizonGlow = clamp((1.0 - horizon * 5.0) * clamp(LIGHT0_DIRECTION.y * 10.0, 0.0, 1.0), 0.0, 1.0) * horizon_color_day.rgb;// 
-	vec3 horizonGlowNight = clamp((1.0 - horizon * dark_falloff) * clamp( - LIGHT0_DIRECTION.y * 10.0, 0.0, 1.0), 0.0, 1.0) * horizon_color_night.rgb;//
-	horizonGlow += horizonGlowNight;
-	
-	// horizon glow / sunset/ -rise
-	float sunset = clamp((1.0 - horizon) * clamp(LIGHT0_DIRECTION.y * 5.0, 0.0, 1.0), 0.0, 1.0);
-	vec3 sunsetColoured = sunset * sun_set.rgb;
-	
-	
-	// sun creation
-	float sun = distance(EYEDIR.xyz, LIGHT0_DIRECTION);
-	float sunDisc = 1.0 - clamp(sun / sun_radius, 0.0, 1.0);
-	
-	// option to render flat sun
-	if (flat_sun == true) {
-		sunDisc = roundEven(sunDisc);
-	}
-	
-	// moon creation
-	float moon = distance(EYEDIR.xyz, - LIGHT0_DIRECTION);
-	float crescentMoon = distance(vec3(EYEDIR.x + moon_crescent, EYEDIR.yz), - LIGHT0_DIRECTION);
-	float crescentMoonDisc = 1.0 - (crescentMoon / moon_radius);
-	crescentMoonDisc = clamp(crescentMoonDisc * 50.0, 0.0, 1.0);
-	float moonDisc = 1.0 - (moon / moon_radius);
-	moonDisc = clamp(moonDisc * 50.0, 0.0, 1.0);
-	moonDisc = clamp(moonDisc - crescentMoonDisc, 0.0, 1.0);
-	
-	// combine sun and moon
-	vec3 sunAndMoon = (sunDisc * sun_color.rgb) + (moonDisc * moon_color.rgb);
-	
-	// stars
-	vec3 stars = texture(stars_texture, skyUV + (stars_speed * (TIME / 20.0))).rgb;
-	stars *= clamp(-LIGHT0_DIRECTION.y, 0.0, 1.0);
-	stars = step(stars_cutoff, stars);
-	stars += stars_sky_color.rgb;
-	//stars += (base_n * stars_sky_color.rgb);
-	
-	
-	//Sky Background Gradient
-	// day color gradient
-	vec3 gradientDay = mix(day_bottom_color.rgb, day_top_color.rgb, clamp(EYEDIR.y, 0.0, 1.0));
-	// night color gradient
-	vec3 gradientNight = mix(night_bottom_color.rgb, night_top_color.rgb, clamp(EYEDIR.y, 0.0, 1.0));
-	vec3 skyGradients = mix(gradientNight, gradientDay, clamp(LIGHT0_DIRECTION.y, 0.0, 1.0));
-	
-	vec3 sky = skyGradients + sunAndMoon + sunsetColoured + stars + horizonGlow;
-	
-	COLOR = sky;
-}"
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_82o32"]
+albedo_texture = ExtResource("11_ncd3l")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qkemo"]
-shader = SubResource("Shader_6q5hn")
+[sub_resource type="QuadMesh" id="QuadMesh_jk4x5"]
+material = SubResource("StandardMaterial3D_82o32")
 
-[sub_resource type="Sky" id="Sky_53exx"]
-sky_material = SubResource("ShaderMaterial_qkemo")
-
-[sub_resource type="Environment" id="Environment_7i4x3"]
-background_mode = 1
-background_color = Color(0.376471, 0.690196, 0.984314, 1)
-background_canvas_max_layer = -1
-sky = SubResource("Sky_53exx")
-ambient_light_color = Color(0.376471, 0.690196, 0.984314, 1)
-reflected_light_source = 2
-glow_strength = 2.0
-glow_bloom = 1.0
-glow_hdr_threshold = 0.92
-glow_hdr_scale = 4.0
-adjustment_enabled = true
+[sub_resource type="Gradient" id="Gradient_nk3tn"]
+offsets = PackedFloat32Array(0, 0.22191, 0.985955)
+colors = PackedColorArray(1, 1, 1, 1, 0.873595, 0.873595, 0.873595, 1, 0, 0, 0, 1)
 
 [node name="test_scene" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1_jhpc0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.09981, 0)
+transform = Transform3D(2.82994, 0, 0, 0, 2.82994, 0, 0, 0, 2.82994, 0, 9, 6)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Meshes" type="Node" parent="."]
+
+[node name="OceanFloor" type="MeshInstance3D" parent="Meshes"]
 transform = Transform3D(65.9201, 0, 0, 0, 8.0225, 0, 0, 0, 56.1487, 0, 0, 0)
 mesh = SubResource("BoxMesh_4t57c")
+skeleton = NodePath("../..")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_7i4x3")
+[node name="StaticBody3D" type="StaticBody3D" parent="Meshes/OceanFloor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Meshes/OceanFloor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_bc7gm")
+
+[node name="CubeTest" type="MeshInstance3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99719, 6.73454, -11.2656)
+mesh = SubResource("BoxMesh_remag")
+
+[node name="SphereTest" type="MeshInstance3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.43757, 6.37422, -11.8007)
+mesh = SubResource("SphereMesh_i5vs7")
+surface_material_override/0 = SubResource("StandardMaterial3D_yagew")
+
+[node name="TorusTest" type="MeshInstance3D" parent="Meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.818, 6.46557, -11.7243)
+mesh = SubResource("TorusMesh_broq6")
+surface_material_override/0 = SubResource("StandardMaterial3D_oo3l0")
+
+[node name="Lighting" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.940881, -0.281157, 0.188929, 0, 0.557745, 0.830012, -0.338738, -0.780943, 0.524772, 0, 49.2169, 0)
+light_color = Color(0.878431, 1, 0.996078, 1)
+light_energy = 5.0
+shadow_enabled = true
+shadow_opacity = 0.6
+directional_shadow_mode = 0
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="Lighting"]
+transform = Transform3D(2.51401, 0, 0, 0, 2.51401, 0, 0, 0, 2.51401, 0.183939, 1, -11.3061)
+material_override = SubResource("StandardMaterial3D_6fgb8")
+amount = 100
+mesh = SubResource("QuadMesh_jk4x5")
+emission_shape = 3
+emission_box_extents = Vector3(30, 50, 30)
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 2, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+linear_accel_min = 1.0
+linear_accel_max = 1.0
+color_ramp = SubResource("Gradient_nk3tn")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = ExtResource("4_adruk")

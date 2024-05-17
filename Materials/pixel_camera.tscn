@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://ds2io021e6teh"]
+
+[ext_resource type="Script" path="res://underwater-photos/Materials/pixel_camera.gd" id="1_gque2"]
+[ext_resource type="Shader" path="res://underwater-photos/Materials/pixel_shader.gdshader" id="1_yxhmd"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kmnl0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ypc36"]
+render_priority = 0
+shader = ExtResource("1_yxhmd")
+shader_parameter/shadows_enabled = true
+shader_parameter/highlights_enabled = true
+shader_parameter/shadow_strength = 0.4
+shader_parameter/highlight_strength = 0.1
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+
+[node name="Pixel_Camera" type="Camera3D"]
+current = true
+size = 4.777
+near = 0.001
+script = ExtResource("1_gque2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2.75, 0, 0, 0, -1.20206e-07, -2.75, 0, 2.75, -1.20206e-07, 0, 0, -0.717082)
+mesh = SubResource("PlaneMesh_kmnl0")
+surface_material_override/0 = SubResource("ShaderMaterial_ypc36")

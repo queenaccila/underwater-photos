@@ -15,7 +15,7 @@ public partial class player : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_camera = GetNode<Camera3D>("Camera3D"); // Ensure you have a Camera3D node as a child of the player
+		_camera = GetNode<Camera3D>("Pixel_Camera"); // Ensure you have a Camera3D node as a child of the player
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
 	}
 
