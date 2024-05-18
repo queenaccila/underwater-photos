@@ -10,18 +10,15 @@ public partial class player : CharacterBody3D
 	[Export] public float MouseSensitivity = 0.1f; // Sensitivity for mouse movement
 
 	private Camera3D _camera;
-	private bool _cameraMode = false;
-	private TextureRect _screenshotDisplay;
 
 	public override void _Ready()
 	{
-		_camera = GetNode<Camera3D>("Pixel_Camera"); // Ensure you have a Camera3D node as a child of the player
+		_camera = GetNode<Camera3D>("Camera3D"); // Ensure you have a Camera3D node as a child of the player
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-
 		Vector3 velocity = Velocity;
 
 		// Apply sinking effect when no input is given for swimming up
@@ -55,34 +52,18 @@ public partial class player : CharacterBody3D
 
 	public override void _Input(InputEvent @event)
 	{
-		if (_cameraMode)
+		if (@event is InputEventMouseMotion mouseEvent)
 		{
-			if (@event is InputEventMouseMotion mouseEvent)
-			{
-				// Rotate the camera around the X axis (pitch)
-				_camera.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MouseSensitivity));
+			// Rotate the player around the Y axis (yaw)
+			RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MouseSensitivity));
 
-				// Clamp the camera rotation to prevent flipping
-				Vector3 cameraRotation = _camera.RotationDegrees;
-				cameraRotation.X = Mathf.Clamp(cameraRotation.X, -90, 90);
-				_camera.RotationDegrees = cameraRotation;
-			}
-		}
-		else
-		{
-			if (@event is InputEventMouseMotion mouseEvent)
-			{
-				// Rotate the player around the Y axis (yaw)
-				RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MouseSensitivity));
+			// Rotate the camera around the X axis (pitch)
+			_camera.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MouseSensitivity));
 
-				// Rotate the camera around the X axis (pitch)
-				_camera.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MouseSensitivity));
-
-				// Clamp the camera rotation to prevent flipping
-				Vector3 cameraRotation = _camera.RotationDegrees;
-				cameraRotation.X = Mathf.Clamp(cameraRotation.X, -90, 90);
-				_camera.RotationDegrees = cameraRotation;
-			}
+			// Clamp the camera rotation to prevent flipping
+			Vector3 cameraRotation = _camera.RotationDegrees;
+			cameraRotation.X = Mathf.Clamp(cameraRotation.X, -90, 90);
+			_camera.RotationDegrees = cameraRotation;
 		}
 	}
 }
