@@ -54,3 +54,7 @@ mesh = SubResource("QuadMesh_3b84j")
 emission_shape = 3
 emission_box_extents = Vector3(1, 4, 0.5)
 gravity = Vector3(0, 3, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -3)
+debug_shape_custom_color = Color(0.74902, 0.298039, 0.560784, 1)

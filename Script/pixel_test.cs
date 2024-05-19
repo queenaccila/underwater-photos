@@ -6,8 +6,11 @@ public partial class pixel_test : Node3D
 	private CanvasLayer _photoMode;
 	private TextureRect _screenshotDisplay;
 	private Viewport _viewport;
+	private ColorRect _blackRect;
+	private AudioStreamPlayer _click;
+	private AudioStreamPlayer _ambience;
+	private AudioStreamPlayer _music;
 	bool photo = false;
-	private int screenshotCount = 0;
 	
 	[Signal]
 	public delegate void PhotoTakenEventHandler();
@@ -21,6 +24,18 @@ public partial class pixel_test : Node3D
 		
 		_screenshotDisplay = GetNode<TextureRect>("CanvasLayer/PhotoMode/ScreenshotDisplay");
 		_viewport = GetNode<Viewport>("PixelContainer/PixelViewport");
+		
+		_blackRect = GetNode<ColorRect>("PixelContainer/PixelViewport/ColorRect");
+		_blackRect.Visible = false;
+		
+		//Audio loading
+		_click = GetNode<AudioStreamPlayer>("Audio/Click");
+		_ambience = GetNode<AudioStreamPlayer>("Audio/Ambience");
+		_music = GetNode<AudioStreamPlayer>("Audio/Music");
+		
+		//Play audio
+		_ambience.Play();
+		_music.Play();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -43,6 +58,7 @@ public partial class pixel_test : Node3D
 		{
 			//GD.Print("took photo");
 			TakeScreenshot();
+			Flash();
 		}
 	}
 
@@ -56,12 +72,31 @@ public partial class pixel_test : Node3D
 		
 		// Save the image as a PNG
 		img.SavePng(filePath);
-
-		EmitSignal(SignalName.PhotoTaken);
 	}
 	
+	private void Flash()
+	{
+		_click.Play();
+		
+		// Define colors for the tween
+		Color transparentColor = new Color(0f, 0f, 0f, 0f); // Fully transparent
+		Color opaqueColor = new Color(0f, 0f, 0f, 1f); // Fully opaque (black)
+		
+		_blackRect.Visible = true; // Make sure the ColorRect is visible
+
+		// Create the tween
+		Tween tween = GetTree().CreateTween();
+
+		// Tween to black (opaque)
+		tween.TweenProperty(_blackRect, "modulate", opaqueColor, 0.1f);
+
+		// Tween back to transparent
+		tween.TweenProperty(_blackRect, "modulate", transparentColor, 0.1f).SetDelay(0.05f);
+	}
+
+	//signal function for PhotoTaken
 	private void _on_photo_taken()
 	{
-		GD.Print("photo");
+		//GD.Print("photo");
 	}
 }

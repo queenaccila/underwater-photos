@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckrsypiwkbgpk"]
+[gd_scene load_steps=7 format=3 uid="uid://ckrsypiwkbgpk"]
 
 [ext_resource type="Script" path="res://underwater-photos/Script/pixel_test.cs" id="1_gsam8"]
 [ext_resource type="PackedScene" uid="uid://csksi6ddfggiv" path="res://underwater-photos/Scenes/test_scene.tscn" id="1_j4iwg"]
 [ext_resource type="PackedScene" uid="uid://b1r7cooubvvwa" path="res://underwater-photos/Scenes/photo_mode.tscn" id="2_512r7"]
+[ext_resource type="AudioStream" uid="uid://cre0fu1ypyomi" path="res://underwater-photos/Audio/contarex-camera-shutter.wav" id="4_jd6s5"]
+[ext_resource type="AudioStream" uid="uid://bamx5nd3j06rc" path="res://underwater-photos/Audio/underwater-ambience.wav" id="5_v0gud"]
+[ext_resource type="AudioStream" uid="uid://co54kht6whlyp" path="res://underwater-photos/Audio/peaceful-fantasy-music.wav" id="6_70mir"]
 
 [node name="pixel_test" type="Node3D"]
 script = ExtResource("1_gsam8")
@@ -15,28 +18,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 8
+stretch_shrink = 9
 
 [node name="PhotoMode" type="CanvasLayer" parent="PixelContainer"]
+visible = false
 
 [node name="PhotoMode" parent="PixelContainer/PhotoMode" instance=ExtResource("2_512r7")]
 
 [node name="PixelViewport" type="SubViewport" parent="PixelContainer"]
 handle_input_locally = false
-size = Vector2i(247, 135)
+size = Vector2i(220, 120)
 render_target_update_mode = 4
 
-[node name="ScreenshotDisplay" type="TextureRect" parent="PixelContainer/PixelViewport"]
-anchors_preset = -1
-anchor_left = 0.301
-anchor_top = 0.167
-anchor_right = 0.693
-anchor_bottom = 0.896
-offset_left = 521.653
-offset_top = 157.455
-offset_right = 520.829
-offset_bottom = 159.04
+[node name="ColorRect" type="ColorRect" parent="PixelContainer/PixelViewport"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
 [node name="test_scene" parent="PixelContainer/PixelViewport" instance=ExtResource("1_j4iwg")]
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Click" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("4_jd6s5")
+bus = &"Sound"
+
+[node name="Ambience" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("5_v0gud")
+volume_db = -20.0
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("6_70mir")
+volume_db = -10.0
 
 [connection signal="PhotoTaken" from="." to="." method="_on_photo_taken"]

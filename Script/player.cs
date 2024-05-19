@@ -8,16 +8,18 @@ public partial class player : CharacterBody3D
 	[Export] public float SinkSpeed = 1.0f; // Speed at which the player sinks
 	[Export] public float WaterResistance = 1.0f; // Resistance to simulate water drag
 	[Export] public float MouseSensitivity = 0.1f; // Sensitivity for mouse movement
+	[Signal] public delegate void PhotoModeEventHandler();
 
 	private Camera3D _camera;
 	public Node photoScene;
+	private RayCast3D _raycast;
 	
 
 	public override void _Ready()
 	{
 		_camera = GetNode<Camera3D>("Camera3D"); // Ensure you have a Camera3D node as a child of the player
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
-		
+		_raycast = GetNode<RayCast3D>("RayCast3D");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -52,17 +54,31 @@ public partial class player : CharacterBody3D
 		Velocity = velocity;
 		MoveAndSlide();
 		
+		if(Input.IsActionJustPressed("camera_mode"))
+		{
+			//pop up camera menu
+			EmitSignal(SignalName.PhotoMode);
+			
+			//test raycast
+			if(_raycast.IsColliding())
+			{
+				GD.Print("collided");
+			}
+		}
 	}
 
 	public override void _Input(InputEvent @event)
 	{
+		// Define the higher mouse sensitivity factor
+		float mouseMovement = 3f;
+		
 		if (@event is InputEventMouseMotion mouseEvent)
 		{
 			// Rotate the player around the Y axis (yaw)
-			RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MouseSensitivity));
+			RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MouseSensitivity * mouseMovement));
 
 			// Rotate the camera around the X axis (pitch)
-			_camera.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MouseSensitivity));
+			_camera.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MouseSensitivity * mouseMovement));
 
 			// Clamp the camera rotation to prevent flipping
 			Vector3 cameraRotation = _camera.RotationDegrees;

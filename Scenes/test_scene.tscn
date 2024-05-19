@@ -54,7 +54,7 @@ shader_parameter/shadow_thickness = 1.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7vb66"]
 next_pass = SubResource("ShaderMaterial_ae47k")
 diffuse_mode = 3
-specular_mode = 1
+specular_mode = 2
 albedo_color = Color(0.266667, 0.172549, 0.643137, 1)
 roughness = 0.0
 
@@ -71,7 +71,7 @@ shader_parameter/shadow_thickness = 1.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sm643"]
 next_pass = SubResource("ShaderMaterial_fpxhi")
 diffuse_mode = 3
-specular_mode = 1
+specular_mode = 2
 albedo_color = Color(0.941176, 0.266667, 0.568627, 1)
 roughness = 0.0
 
@@ -90,7 +90,7 @@ shader_parameter/shadow_thickness = 1.0
 next_pass = SubResource("ShaderMaterial_1hkne")
 shading_mode = 2
 diffuse_mode = 3
-specular_mode = 1
+specular_mode = 2
 albedo_color = Color(0.133333, 0.458824, 0.745098, 1)
 roughness = 0.0
 
