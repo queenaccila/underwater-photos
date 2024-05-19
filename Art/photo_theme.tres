@@ -1,21 +1,9 @@
-[gd_resource type="Theme" load_steps=10 format=3 uid="uid://cuw28tl6o35x4"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://cuw28tl6o35x4"]
 
 [ext_resource type="Texture2D" uid="uid://cnvfh4txi1tif" path="res://underwater-photos/Art/ui/camera-ui-main.png" id="1_gc835"]
-[ext_resource type="Texture2D" uid="uid://bsih73o3yvv4b" path="res://underwater-photos/Art/ui/camera-ui-button.png" id="1_l8c04"]
-[ext_resource type="Texture2D" uid="uid://dip6mcva6nyoe" path="res://underwater-photos/Art/ui/camera-ui-button-pressed.png" id="2_3pcaj"]
 [ext_resource type="FontFile" uid="uid://b5fphnthv7qrs" path="res://underwater-photos/Art/digital_disco/DigitalDisco.ttf" id="2_wlx2w"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_764al"]
-texture = ExtResource("1_l8c04")
-expand_margin_top = 40.0
-expand_margin_bottom = 40.0
-region_rect = Rect2(0, 0, 40, 40)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1858p"]
-texture = ExtResource("2_3pcaj")
-expand_margin_top = 40.0
-expand_margin_bottom = 40.0
-region_rect = Rect2(0, 0, 40, 40)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lomqa"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3irjl"]
 texture = ExtResource("1_gc835")
@@ -29,11 +17,8 @@ texture = ExtResource("1_gc835")
 [resource]
 default_font = ExtResource("2_wlx2w")
 default_font_size = 40
-Button/font_sizes/font_size = 80
-Button/styles/focus = SubResource("StyleBoxTexture_764al")
-Button/styles/hover = SubResource("StyleBoxTexture_1858p")
-Button/styles/normal = SubResource("StyleBoxTexture_764al")
-Button/styles/pressed = SubResource("StyleBoxTexture_1858p")
+Button/font_sizes/font_size = 100
+Button/styles/normal = SubResource("StyleBoxTexture_lomqa")
 Photo/styles/Main_UI = SubResource("StyleBoxTexture_3irjl")
 TextEdit/styles/focus = SubResource("StyleBoxTexture_vuqtr")
 TextEdit/styles/normal = SubResource("StyleBoxTexture_mu0ab")
