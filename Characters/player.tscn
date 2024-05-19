@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cl5j5gaw27nio"]
+[gd_scene load_steps=10 format=3 uid="uid://cl5j5gaw27nio"]
 
 [ext_resource type="Script" path="res://underwater-photos/Script/player.cs" id="1_uqmje"]
 [ext_resource type="Shader" path="res://underwater-photos/Materials/pixel_test.gdshader" id="2_6qheq"]
+[ext_resource type="Texture2D" uid="uid://g8gxhyo5kf02" path="res://underwater-photos/Art/bubble-pixels.png" id="3_knx7h"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_b8hxc"]
 
@@ -16,6 +17,18 @@ shader_parameter/depth_threshold = 0.05
 [sub_resource type="QuadMesh" id="QuadMesh_lt8nt"]
 material = SubResource("ShaderMaterial_npe2n")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xyrn"]
+transparency = 1
+shading_mode = 0
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("3_knx7h")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_3b84j"]
+material = SubResource("StandardMaterial3D_0xyrn")
+size = Vector2(0.35, 0.35)
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_uqmje")
 
@@ -26,8 +39,18 @@ mesh = SubResource("CapsuleMesh_b8hxc")
 shape = SubResource("ConvexPolygonShape3D_resls")
 
 [node name="Camera3D" type="Camera3D" parent="."]
+current = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
 transform = Transform3D(5.96834, 0, 0, 0, 5.96834, 0, 0, 0, 5.96834, 0, 0, -1)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_lt8nt")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.963623, -1.31482)
+amount = 5
+speed_scale = 0.5
+mesh = SubResource("QuadMesh_3b84j")
+emission_shape = 3
+emission_box_extents = Vector3(1, 4, 0.5)
+gravity = Vector3(0, 3, 0)

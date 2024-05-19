@@ -10,11 +10,14 @@ public partial class player : CharacterBody3D
 	[Export] public float MouseSensitivity = 0.1f; // Sensitivity for mouse movement
 
 	private Camera3D _camera;
+	public Node photoScene;
+	
 
 	public override void _Ready()
 	{
 		_camera = GetNode<Camera3D>("Camera3D"); // Ensure you have a Camera3D node as a child of the player
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
+		
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -48,6 +51,7 @@ public partial class player : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
+		
 	}
 
 	public override void _Input(InputEvent @event)

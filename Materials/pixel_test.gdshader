@@ -3,7 +3,7 @@ render_mode unshaded;
 
 uniform sampler2D screen_texture : source_color, hint_screen_texture, filter_nearest;
 uniform sampler2D depth_texture : source_color, hint_depth_texture, filter_nearest;
-uniform sampler2D normal_texture : source_color, hint_normal_roughness_texture, filter_nearest;
+//uniform sampler2D normal_texture : source_color, hint_normal_roughness_texture, filter_nearest;
 
 uniform float depth_threshold : hint_range(0, 1) = 0.05;
 
