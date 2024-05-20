@@ -1,9 +1,17 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://cuw28tl6o35x4"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://cuw28tl6o35x4"]
 
+[ext_resource type="Texture2D" uid="uid://6xjrioon0jt3" path="res://underwater-photos/Art/ui/camera-ui-unchecked.png" id="1_800m7"]
 [ext_resource type="Texture2D" uid="uid://cnvfh4txi1tif" path="res://underwater-photos/Art/ui/camera-ui-main.png" id="1_gc835"]
+[ext_resource type="Texture2D" uid="uid://bsypc4jha4313" path="res://underwater-photos/Art/ui/camera-ui-panel2.png" id="1_homim"]
 [ext_resource type="FontFile" uid="uid://b5fphnthv7qrs" path="res://underwater-photos/Art/digital_disco/DigitalDisco.ttf" id="2_wlx2w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lomqa"]
+texture = ExtResource("1_homim")
+expand_margin_left = 50.0
+expand_margin_right = 50.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3m2gg"]
+texture = ExtResource("1_800m7")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3irjl"]
 texture = ExtResource("1_gc835")
@@ -17,8 +25,11 @@ texture = ExtResource("1_gc835")
 [resource]
 default_font = ExtResource("2_wlx2w")
 default_font_size = 40
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(0.788235, 0.678431, 0.654902, 1)
 Button/font_sizes/font_size = 100
 Button/styles/normal = SubResource("StyleBoxTexture_lomqa")
+Button/styles/pressed = SubResource("StyleBoxTexture_3m2gg")
 Photo/styles/Main_UI = SubResource("StyleBoxTexture_3irjl")
 TextEdit/styles/focus = SubResource("StyleBoxTexture_vuqtr")
 TextEdit/styles/normal = SubResource("StyleBoxTexture_mu0ab")

@@ -1,0 +1,115 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbtryavmttse0"]
+
+[ext_resource type="Texture2D" uid="uid://d15v3sa47bbp8" path="res://underwater-photos/Art/ui/camera-ui-generic-panel.png" id="1_6jb18"]
+[ext_resource type="Theme" uid="uid://cuw28tl6o35x4" path="res://underwater-photos/Art/photo_theme.tres" id="2_b3txl"]
+[ext_resource type="Texture2D" uid="uid://6xjrioon0jt3" path="res://underwater-photos/Art/ui/camera-ui-unchecked.png" id="3_oxka7"]
+
+[node name="Journal" type="CanvasLayer"]
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_6jb18")
+
+[node name="Title" type="Label" parent="."]
+anchors_preset = -1
+anchor_top = 0.023
+anchor_right = 1.0
+anchor_bottom = 0.307
+offset_top = 0.159998
+offset_bottom = 0.440002
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_b3txl")
+theme_override_font_sizes/font_size = 150
+text = "Fishes To Find"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.117
+anchor_top = 0.263
+anchor_right = 0.876
+anchor_bottom = 0.729
+offset_left = -0.660019
+offset_top = -36.04
+offset_right = -0.480103
+offset_bottom = -0.320007
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Task1" type="BoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Icon-Task" type="TextureRect" parent="VBoxContainer/Task1"]
+layout_mode = 2
+texture = ExtResource("3_oxka7")
+expand_mode = 2
+
+[node name="Cross" type="Label" parent="VBoxContainer/Task1"]
+layout_mode = 2
+theme = ExtResource("2_b3txl")
+theme_override_font_sizes/font_size = 100
+text = "Find a red fish"
+
+[node name="Task2" type="BoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Icon-Task" type="TextureRect" parent="VBoxContainer/Task2"]
+layout_mode = 2
+texture = ExtResource("3_oxka7")
+expand_mode = 2
+
+[node name="Cross" type="Label" parent="VBoxContainer/Task2"]
+layout_mode = 2
+theme = ExtResource("2_b3txl")
+theme_override_font_sizes/font_size = 100
+text = "Find a fish with a hat"
+
+[node name="Task3" type="BoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Icon-Task" type="TextureRect" parent="VBoxContainer/Task3"]
+layout_mode = 2
+texture = ExtResource("3_oxka7")
+expand_mode = 2
+
+[node name="Cross" type="Label" parent="VBoxContainer/Task3"]
+layout_mode = 2
+theme = ExtResource("2_b3txl")
+theme_override_font_sizes/font_size = 100
+text = "Find a clownfish"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_top = 0.75
+anchor_right = 1.0
+anchor_bottom = 0.928
+offset_top = -6.10352e-05
+offset_bottom = -0.240051
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 280
+alignment = 1
+
+[node name="MainMenu" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(500, 200)
+layout_mode = 2
+theme = ExtResource("2_b3txl")
+text = "Main Menu"
+
+[node name="Quit" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(500, 200)
+layout_mode = 2
+theme = ExtResource("2_b3txl")
+text = "Quit Game"

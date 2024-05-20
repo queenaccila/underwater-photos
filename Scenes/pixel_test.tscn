@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckrsypiwkbgpk"]
+[gd_scene load_steps=8 format=3 uid="uid://ckrsypiwkbgpk"]
 
 [ext_resource type="Script" path="res://underwater-photos/Script/pixel_test.cs" id="1_gsam8"]
 [ext_resource type="PackedScene" uid="uid://csksi6ddfggiv" path="res://underwater-photos/Scenes/test_scene.tscn" id="1_j4iwg"]
 [ext_resource type="PackedScene" uid="uid://b1r7cooubvvwa" path="res://underwater-photos/Scenes/photo_mode.tscn" id="2_512r7"]
+[ext_resource type="PackedScene" uid="uid://dr1o6je77hpy5" path="res://underwater-photos/Scenes/game_ui.tscn" id="4_hub51"]
 [ext_resource type="AudioStream" uid="uid://cre0fu1ypyomi" path="res://underwater-photos/Audio/contarex-camera-shutter.wav" id="4_jd6s5"]
 [ext_resource type="AudioStream" uid="uid://bamx5nd3j06rc" path="res://underwater-photos/Audio/underwater-ambience.wav" id="5_v0gud"]
 [ext_resource type="AudioStream" uid="uid://co54kht6whlyp" path="res://underwater-photos/Audio/peaceful-fantasy-music.wav" id="6_70mir"]
@@ -19,6 +20,8 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 stretch_shrink = 9
+
+[node name="GameUI" parent="PixelContainer" instance=ExtResource("4_hub51")]
 
 [node name="PhotoMode" type="CanvasLayer" parent="PixelContainer"]
 visible = false
@@ -53,6 +56,5 @@ volume_db = -20.0
 
 [node name="Music" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("6_70mir")
-volume_db = -10.0
 
 [connection signal="PhotoTaken" from="." to="." method="_on_photo_taken"]

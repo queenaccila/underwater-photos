@@ -4,6 +4,7 @@ using System;
 public partial class pixel_test : Node3D
 {
 	private CanvasLayer _photoMode;
+	private CanvasLayer _gameUI;
 	private TextureRect _screenshotDisplay;
 	private Viewport _viewport;
 	private ColorRect _blackRect;
@@ -14,6 +15,10 @@ public partial class pixel_test : Node3D
 	
 	[Signal]
 	public delegate void PhotoTakenEventHandler();
+	
+	//preload journal scene
+	private PackedScene _journalScene = GD.Load<PackedScene>("res://underwater-photos/Scenes/journal.tscn");
+	bool journalMode = false;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -36,6 +41,10 @@ public partial class pixel_test : Node3D
 		//Play audio
 		_ambience.Play();
 		_music.Play();
+		
+		//show main game ui
+		_gameUI = GetNode<CanvasLayer>("PixelContainer/GameUI");
+		_gameUI.Visible = true;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,11 +54,13 @@ public partial class pixel_test : Node3D
 		if(Input.IsActionJustPressed("camera_mode") && photo == false)
 		{
 			_photoMode.Visible = true;
+			_gameUI.Visible = false;
 			photo = true;
 		}
 		else if (Input.IsActionJustPressed("camera_mode") && photo == true)
 		{
 			_photoMode.Visible = false;
+			_gameUI.Visible = true;
 			photo = false;
 		}
 		
@@ -59,6 +70,25 @@ public partial class pixel_test : Node3D
 			//GD.Print("took photo");
 			TakeScreenshot();
 			Flash();
+		}
+		
+		//goes to journal menu
+		if(Input.IsActionJustPressed("journal") && journalMode == false)
+		{
+			//cursor is visible
+			Input.MouseMode = 0;
+			
+			Node journal = _journalScene.Instantiate();
+			AddChild(journal);
+			journalMode = true;
+		}
+		else if (Input.IsActionJustPressed("journal") && journalMode == true)
+		{
+			//cursor is invisible
+			Input.MouseMode = Input.MouseMode.MOUSE_MODE_HIDDEN;
+			
+			GetChild(GetChildCount() - 1).QueueFree();
+			journalMode = false;
 		}
 	}
 
