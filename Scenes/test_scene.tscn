@@ -9,10 +9,16 @@
 [ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/TextureSetResource.cs" id="5_ku55x"]
 [ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/TextureSetsResource.cs" id="6_ulwy2"]
 [ext_resource type="Texture2D" uid="uid://dvgqmj0k52c5v" path="res://underwater-photos/Scenes/test_scene/Heightmap_0_0.res" id="7_73tx5"]
+[ext_resource type="ArrayMesh" uid="uid://clwk5js2ydcs0" path="res://underwater-photos/Art/models/uploads_files_2454917_Coral.obj" id="7_ccd3c"]
+[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/FoliageDefinitionResource.cs" id="7_wq6od"]
+[ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/FoliageResource.cs" id="8_b0hsq"]
 [ext_resource type="Texture2D" uid="uid://qvfvg1kay5h6" path="res://underwater-photos/Scenes/test_scene/Splatmap_0_0_0.res" id="8_bq2kc"]
 [ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZoneResource.cs" id="9_6vbux"]
 [ext_resource type="Script" path="res://addons/terrabrush/Scripts/EditorResources/ZonesResource.cs" id="10_0ppn6"]
 [ext_resource type="Texture2D" uid="uid://dk0dhirqygxvt" path="res://underwater-photos/Art/ocean-particles.png" id="11_ncd3l"]
+[ext_resource type="Texture2D" uid="uid://bem3bo7dv06w2" path="res://underwater-photos/Scenes/test_scene/Foliage_0_0_0.res" id="11_rhvsi"]
+[ext_resource type="PackedScene" uid="uid://dy2deoq5vc7n" path="res://underwater-photos/Characters/fish_loop.tscn" id="14_dode3"]
+[ext_resource type="PackedScene" uid="uid://bo7obba88nk35" path="res://underwater-photos/Characters/red_fish.tscn" id="15_i6g15"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4iiyf"]
 albedo_color = Color(0.192157, 0.301961, 0.427451, 1)
@@ -34,73 +40,44 @@ TextureDetail = -1
 script = ExtResource("6_ulwy2")
 TextureSets = [SubResource("Resource_l3pbk")]
 
-[sub_resource type="Resource" id="Resource_5uisd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stwgy"]
+render_priority = 0
+shader = ExtResource("3_hfqnu")
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_thickness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ixuup"]
+next_pass = SubResource("ShaderMaterial_stwgy")
+diffuse_mode = 3
+specular_mode = 2
+albedo_color = Color(0.290196, 0.701961, 0.505882, 1)
+roughness = 0.0
+
+[sub_resource type="Resource" id="Resource_24t46"]
+script = ExtResource("7_wq6od")
+Mesh = ExtResource("7_ccd3c")
+MeshMaterial = SubResource("StandardMaterial3D_ixuup")
+MeshScale = Vector3(10, 10, 10)
+MaximumRenderDistance = 20
+EditorMaximumRenderDistance = 200
+WindStrength = 0.1
+VisualInstanceLayers = 1
+
+[sub_resource type="Resource" id="Resource_63q1v"]
+script = ExtResource("8_b0hsq")
+Definition = SubResource("Resource_24t46")
+
+[sub_resource type="Resource" id="Resource_aybmp"]
 script = ExtResource("9_6vbux")
 ZonePosition = Vector2i(0, 0)
 HeightMapTexture = ExtResource("7_73tx5")
 SplatmapsTexture = [ExtResource("8_bq2kc")]
-FoliagesTexture = []
-ObjectsTexture = []
+FoliagesTexture = [ExtResource("11_rhvsi")]
+ObjectsTexture = null
 
-[sub_resource type="Resource" id="Resource_jlu1l"]
+[sub_resource type="Resource" id="Resource_37t21"]
 script = ExtResource("10_0ppn6")
-Zones = [SubResource("Resource_5uisd")]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ae47k"]
-render_priority = 0
-shader = ExtResource("3_hfqnu")
-shader_parameter/shadow_color = Color(0, 0, 0, 1)
-shader_parameter/shadow_thickness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7vb66"]
-next_pass = SubResource("ShaderMaterial_ae47k")
-diffuse_mode = 3
-specular_mode = 2
-albedo_color = Color(0.266667, 0.172549, 0.643137, 1)
-roughness = 0.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_remag"]
-material = SubResource("StandardMaterial3D_7vb66")
-size = Vector3(3, 3, 3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_7kubl"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fpxhi"]
-render_priority = 0
-shader = ExtResource("3_hfqnu")
-shader_parameter/shadow_color = Color(0, 0, 0, 1)
-shader_parameter/shadow_thickness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sm643"]
-next_pass = SubResource("ShaderMaterial_fpxhi")
-diffuse_mode = 3
-specular_mode = 2
-albedo_color = Color(0.941176, 0.266667, 0.568627, 1)
-roughness = 0.0
-
-[sub_resource type="SphereMesh" id="SphereMesh_i5vs7"]
-material = SubResource("StandardMaterial3D_sm643")
-radius = 1.5
-height = 3.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1hkne"]
-render_priority = 0
-shader = ExtResource("3_hfqnu")
-shader_parameter/shadow_color = Color(0, 0, 0, 1)
-shader_parameter/shadow_thickness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_54ndj"]
-next_pass = SubResource("ShaderMaterial_1hkne")
-shading_mode = 2
-diffuse_mode = 3
-specular_mode = 2
-albedo_color = Color(0.133333, 0.458824, 0.745098, 1)
-roughness = 0.0
-
-[sub_resource type="TorusMesh" id="TorusMesh_broq6"]
-material = SubResource("StandardMaterial3D_54ndj")
-inner_radius = 1.0
-outer_radius = 2.0
+Zones = [SubResource("Resource_aybmp")]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fgb8"]
 transparency = 1
@@ -127,7 +104,7 @@ colors = PackedColorArray(1, 1, 1, 1, 0.873595, 0.873595, 0.873595, 1, 0, 0, 0, 
 script = ExtResource("1_2163s")
 
 [node name="Player" parent="." instance=ExtResource("1_jhpc0")]
-transform = Transform3D(2.82994, 0, 0, 0, 2.82994, 0, 0, 0, 2.82994, -4, 9, -3)
+transform = Transform3D(2.82994, 0, 0, 0, 2.82994, 0, 0, 0, 2.82994, -4, 20.2833, 14.3361)
 
 [node name="Meshes" type="Node" parent="."]
 
@@ -145,33 +122,10 @@ shape = SubResource("ConcavePolygonShape3D_bc7gm")
 script = ExtResource("3_8ddrw")
 DataPath = "res://underwater-photos/Scenes/test_scene"
 TextureSets = SubResource("Resource_3yqu0")
-Foliages = []
+Foliages = [SubResource("Resource_63q1v")]
 Objects = []
-TerrainZones = SubResource("Resource_jlu1l")
+TerrainZones = SubResource("Resource_37t21")
 metadata/_edit_lock_ = false
-
-[node name="TestObjects" type="Node" parent="Meshes"]
-
-[node name="CubeTest" type="MeshInstance3D" parent="Meshes/TestObjects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99719, 6.73454, -11.2656)
-mesh = SubResource("BoxMesh_remag")
-skeleton = NodePath("../..")
-
-[node name="Area3D" type="Area3D" parent="Meshes/TestObjects/CubeTest" groups=["test"]]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Meshes/TestObjects/CubeTest/Area3D"]
-transform = Transform3D(3.48851, 0, 0, 0, 3.48851, 0, 0, 0, 3.48851, 0, 0, 0)
-shape = SubResource("BoxShape3D_7kubl")
-
-[node name="SphereTest" type="MeshInstance3D" parent="Meshes/TestObjects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.43757, 6.37422, -11.8007)
-mesh = SubResource("SphereMesh_i5vs7")
-skeleton = NodePath("../..")
-
-[node name="TorusTest" type="MeshInstance3D" parent="Meshes/TestObjects"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.818, 6.46557, -11.7243)
-mesh = SubResource("TorusMesh_broq6")
-skeleton = NodePath("../..")
 
 [node name="Lighting" type="Node" parent="."]
 
@@ -201,6 +155,14 @@ color_ramp = SubResource("Gradient_nk3tn")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
 environment = ExtResource("4_adruk")
+
+[node name="NPCFish" type="Node" parent="."]
+
+[node name="fish-loop" parent="NPCFish" instance=ExtResource("14_dode3")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 34.371, -10.8028)
+
+[node name="red_fish" parent="NPCFish" instance=ExtResource("15_i6g15")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 28.8177, 24.6793, 26.0934)
 
 [connection signal="FishEnter" from="Player" to="." method="_on_player_fish_enter"]
 [connection signal="FishExit" from="Player" to="." method="_on_player_fish_exit"]

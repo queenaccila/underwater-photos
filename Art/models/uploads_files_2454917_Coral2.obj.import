@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://pareoulbgit"
+path="res://.godot/imported/uploads_files_2454917_Coral2.obj-03cb70be32a47d0e42e6a75b1651de19.mesh"
+
+[deps]
+
+files=["res://.godot/imported/uploads_files_2454917_Coral2.obj-03cb70be32a47d0e42e6a75b1651de19.mesh"]
+
+source_file="res://underwater-photos/Art/models/uploads_files_2454917_Coral2.obj"
+dest_files=["res://.godot/imported/uploads_files_2454917_Coral2.obj-03cb70be32a47d0e42e6a75b1651de19.mesh", "res://.godot/imported/uploads_files_2454917_Coral2.obj-03cb70be32a47d0e42e6a75b1651de19.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

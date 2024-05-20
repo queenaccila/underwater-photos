@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dy2deoq5vc7n"]
+
+[ext_resource type="PackedScene" uid="uid://d1kpijf1k4lrq" path="res://underwater-photos/Characters/fish-loop.glb" id="1_mtjqq"]
+[ext_resource type="Script" path="res://underwater-photos/Script/fish.cs" id="2_4uot0"]
+[ext_resource type="Shader" path="res://underwater-photos/Materials/outline.gdshader" id="3_o5stk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dudh7"]
+render_priority = 0
+shader = ExtResource("3_o5stk")
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_thickness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t1bss"]
+next_pass = SubResource("ShaderMaterial_dudh7")
+diffuse_mode = 3
+specular_mode = 2
+albedo_color = Color(0.588235, 0.619608, 0.772549, 1)
+roughness = 0.0
+
+[node name="fish-loop" instance=ExtResource("1_mtjqq")]
+script = ExtResource("2_4uot0")
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(-0.00743857, -2.53524, 0.626068)
+bones/0/rotation = Quaternion(-0.119214, -0.0193128, 0.00332842, 0.992675)
+bones/1/rotation = Quaternion(0.00808527, 0.0224878, -0.00113641, 0.999714)
+bones/1/scale = Vector3(1, 1, 1)
+bones/2/rotation = Quaternion(-0.00905029, 0.00794824, 0.0116613, 0.99986)
+bones/3/rotation = Quaternion(-0.00784088, -0.0117031, -0.0151618, 0.999786)
+bones/4/rotation = Quaternion(0.0176113, 0.00134687, -0.000165087, 0.999844)
+bones/4/scale = Vector3(1, 1, 1)
+bones/5/rotation = Quaternion(-0.0208014, 1.79057e-08, 0.00219056, 0.999781)
+
+[node name="Cube" parent="Armature/Skeleton3D" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_t1bss")

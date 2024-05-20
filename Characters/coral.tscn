@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dphyjmaglpyds"]
+
+[ext_resource type="PackedScene" uid="uid://c5yvnykxhiled" path="res://underwater-photos/Art/models/Coral-1.glb" id="1_cih8f"]
+
+[node name="Coral-1" instance=ExtResource("1_cih8f")]
