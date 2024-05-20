@@ -1,5 +1,6 @@
-[gd_scene load_steps=33 format=3 uid="uid://csksi6ddfggiv"]
+[gd_scene load_steps=35 format=3 uid="uid://csksi6ddfggiv"]
 
+[ext_resource type="Script" path="res://underwater-photos/Script/test_scene.cs" id="1_2163s"]
 [ext_resource type="PackedScene" uid="uid://cl5j5gaw27nio" path="res://underwater-photos/Characters/player.tscn" id="1_jhpc0"]
 [ext_resource type="Script" path="res://addons/terrabrush/TerraBrush.cs" id="3_8ddrw"]
 [ext_resource type="Shader" path="res://underwater-photos/Materials/outline.gdshader" id="3_hfqnu"]
@@ -62,6 +63,8 @@ roughness = 0.0
 material = SubResource("StandardMaterial3D_7vb66")
 size = Vector3(3, 3, 3)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_7kubl"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fpxhi"]
 render_priority = 0
 shader = ExtResource("3_hfqnu")
@@ -121,6 +124,7 @@ offsets = PackedFloat32Array(0, 0.22191, 0.985955)
 colors = PackedColorArray(1, 1, 1, 1, 0.873595, 0.873595, 0.873595, 1, 0, 0, 0, 1)
 
 [node name="test_scene" type="Node3D"]
+script = ExtResource("1_2163s")
 
 [node name="Player" parent="." instance=ExtResource("1_jhpc0")]
 transform = Transform3D(2.82994, 0, 0, 0, 2.82994, 0, 0, 0, 2.82994, -4, 9, -3)
@@ -152,6 +156,12 @@ metadata/_edit_lock_ = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.99719, 6.73454, -11.2656)
 mesh = SubResource("BoxMesh_remag")
 skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="Meshes/TestObjects/CubeTest" groups=["test"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Meshes/TestObjects/CubeTest/Area3D"]
+transform = Transform3D(3.48851, 0, 0, 0, 3.48851, 0, 0, 0, 3.48851, 0, 0, 0)
+shape = SubResource("BoxShape3D_7kubl")
 
 [node name="SphereTest" type="MeshInstance3D" parent="Meshes/TestObjects"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.43757, 6.37422, -11.8007)
@@ -191,3 +201,6 @@ color_ramp = SubResource("Gradient_nk3tn")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
 environment = ExtResource("4_adruk")
+
+[connection signal="FishEnter" from="Player" to="." method="_on_player_fish_enter"]
+[connection signal="FishExit" from="Player" to="." method="_on_player_fish_exit"]

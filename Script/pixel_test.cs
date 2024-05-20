@@ -84,9 +84,6 @@ public partial class pixel_test : Node3D
 		}
 		else if (Input.IsActionJustPressed("journal") && journalMode == true)
 		{
-			//cursor is invisible
-			Input.MouseMode = Input.MouseMode.MOUSE_MODE_HIDDEN;
-			
 			GetChild(GetChildCount() - 1).QueueFree();
 			journalMode = false;
 		}
@@ -123,10 +120,13 @@ public partial class pixel_test : Node3D
 		// Tween back to transparent
 		tween.TweenProperty(_blackRect, "modulate", transparentColor, 0.1f).SetDelay(0.05f);
 	}
-
-	//signal function for PhotoTaken
-	private void _on_photo_taken()
+	
+	//checking type
+	private void _on_test_scene_fish_checked(long fishNum)
 	{
-		//GD.Print("photo");
+		//test group
+		if(fishNum == 0){
+			globalVar.fishType = 0;
+		}
 	}
 }

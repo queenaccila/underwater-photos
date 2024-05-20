@@ -8,18 +8,22 @@ public partial class player : CharacterBody3D
 	[Export] public float SinkSpeed = 1.0f; // Speed at which the player sinks
 	[Export] public float WaterResistance = 1.0f; // Resistance to simulate water drag
 	[Export] public float MouseSensitivity = 0.1f; // Sensitivity for mouse movement
-	[Signal] public delegate void PhotoModeEventHandler();
+	[Export] public Area3D FishDetection;
+	
+	//signals to detect types of creatures
+	[Signal] public delegate void FishEnterEventHandler(Area3D area);
+	[Signal] public delegate void FishExitEventHandler(Area3D area);
+	bool fishInside = false;
 
 	private Camera3D _camera;
 	public Node photoScene;
-	private RayCast3D _raycast;
+	bool photoMode = false;
 	
 
 	public override void _Ready()
 	{
 		_camera = GetNode<Camera3D>("Camera3D"); // Ensure you have a Camera3D node as a child of the player
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Capture the mouse for free look
-		_raycast = GetNode<RayCast3D>("RayCast3D");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -56,13 +60,12 @@ public partial class player : CharacterBody3D
 		
 		if(Input.IsActionJustPressed("camera_mode"))
 		{
-			//pop up camera menu
-			EmitSignal(SignalName.PhotoMode);
-			
-			//test raycast
-			if(_raycast.IsColliding())
-			{
-				GD.Print("collided");
+			//if photo mode is enabled
+			if(photoMode == false){
+				photoMode = true;
+			} 
+			else if(photoMode == true) {
+				photoMode = false;
 			}
 		}
 	}
@@ -85,5 +88,15 @@ public partial class player : CharacterBody3D
 			cameraRotation.X = Mathf.Clamp(cameraRotation.X, -90, 90);
 			_camera.RotationDegrees = cameraRotation;
 		}
+	}
+	
+	private void _on_area_3d_area_entered(Area3D area)
+	{
+		EmitSignal(SignalName.FishEnter, area);
+	}
+	
+	private void _on_area_3d_area_exited(Area3D area)
+	{
+		EmitSignal(SignalName.FishExit, area);
 	}
 }

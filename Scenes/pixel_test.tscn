@@ -58,3 +58,4 @@ volume_db = -20.0
 stream = ExtResource("6_70mir")
 
 [connection signal="PhotoTaken" from="." to="." method="_on_photo_taken"]
+[connection signal="FishChecked" from="PixelContainer/PixelViewport/test_scene" to="." method="_on_test_scene_fish_checked"]

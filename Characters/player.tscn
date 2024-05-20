@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cl5j5gaw27nio"]
+[gd_scene load_steps=11 format=3 uid="uid://cl5j5gaw27nio"]
 
 [ext_resource type="Script" path="res://underwater-photos/Script/player.cs" id="1_uqmje"]
 [ext_resource type="Shader" path="res://underwater-photos/Materials/pixel_test.gdshader" id="2_6qheq"]
@@ -29,8 +29,12 @@ billboard_mode = 1
 material = SubResource("StandardMaterial3D_0xyrn")
 size = Vector2(0.35, 0.35)
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_eu5hc"]
+size = Vector3(1.78516, 1, 2)
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("FishDetection")]
 script = ExtResource("1_uqmje")
+FishDetection = NodePath("Area3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_b8hxc")
@@ -55,6 +59,11 @@ emission_shape = 3
 emission_box_extents = Vector3(1, 4, 0.5)
 gravity = Vector3(0, 3, 0)
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
-target_position = Vector3(0, 0, -3)
-debug_shape_custom_color = Color(0.74902, 0.298039, 0.560784, 1)
+[node name="Area3D" type="Area3D" parent="." groups=["player"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.102539, 0, -1.62134)
+shape = SubResource("BoxShape3D_eu5hc")
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="area_exited" from="Area3D" to="." method="_on_area_3d_area_exited"]
